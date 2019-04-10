@@ -17,3 +17,5 @@ Gemfile.lock
 settings.gradle
 gradle.properties
 lib/logstash-output-java_output_example_jars.rb
+/.classpath
+/.project
