@@ -1,7 +1,10 @@
 package org.logstash.javaapi;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import co.elastic.apm.attach.ElasticApmAttacher;
@@ -16,7 +19,9 @@ import co.elastic.logstash.api.PluginConfigSpec;
 @LogstashPlugin(name = "elastic_apm_server")
 public class ElasticApmServer implements Output {
 
-	public static final PluginConfigSpec<String> PREFIX_CONFIG = PluginConfigSpec.stringSetting("prefix", "");
+	public static final PluginConfigSpec<String> SERVER_URLS = PluginConfigSpec.requiredStringSetting("server_urls");
+	public static final PluginConfigSpec<String> SERVICE_NAME = PluginConfigSpec.requiredStringSetting("service_name");
+	public static final PluginConfigSpec<String> LOG_LEVEL = PluginConfigSpec.stringSetting("log_level", "INFO");
 
 	private final String id;
 
@@ -26,8 +31,13 @@ public class ElasticApmServer implements Output {
 	// Context
 	public ElasticApmServer(final String id, final Configuration configuration, final Context context) {
 		
-		ElasticApmAttacher.attach();
+		Map<String, String> configMap = new HashMap<String, String>();
+		configMap.put("server_urls", configuration.get(SERVER_URLS));
+		configMap.put("service_name", configuration.get(SERVICE_NAME));
+		configMap.put("log_level", configuration.get(LOG_LEVEL));
 
+		ElasticApmAttacher.attach(configMap);
+		
 		this.id = id;
 	}
 
@@ -48,8 +58,13 @@ public class ElasticApmServer implements Output {
 
 	@Override
 	public Collection<PluginConfigSpec<?>> configSchema() {
+		Collection<PluginConfigSpec<?>> list = new ArrayList<PluginConfigSpec<?>>();
 		// should return a list of all configuration options for this plugin
-		return Collections.singletonList(PREFIX_CONFIG);
+		Collections.addAll(list, 
+				SERVER_URLS, 
+				SERVICE_NAME
+				);
+		return list;
 	}
 
 	@Override
