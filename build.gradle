@@ -10,7 +10,7 @@ apply plugin: "distribution"
 group 'org.logstash.javaapi'
 version "${file("VERSION").text.trim()}"
 
-description = "Example Java output implementation"
+description = "Elastic APM server logstash output implementation"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
