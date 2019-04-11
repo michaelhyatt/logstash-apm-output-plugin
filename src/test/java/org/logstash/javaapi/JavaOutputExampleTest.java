@@ -18,10 +18,10 @@ public class JavaOutputExampleTest {
     public void testJavaOutputExample() {
         String prefix = "Prefix";
         Map<String, Object> configValues = new HashMap<>();
-        configValues.put(JavaOutputExample.PREFIX_CONFIG.name(), prefix);
+        configValues.put(ElasticApmServer.PREFIX_CONFIG.name(), prefix);
         Configuration config = new ConfigurationImpl(configValues);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        JavaOutputExample output = new JavaOutputExample("test-id", config, null, baos);
+        ElasticApmServer output = new ElasticApmServer("test-id", config, null, baos);
 
         String sourceField = "message";
         int eventCount = 5;

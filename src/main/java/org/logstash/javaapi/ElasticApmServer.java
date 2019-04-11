@@ -15,8 +15,8 @@ import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 
 // class name must match plugin name
-@LogstashPlugin(name = "java_output_example")
-public class JavaOutputExample implements Output {
+@LogstashPlugin(name = "elastic_apm_server")
+public class ElasticApmServer implements Output {
 
 	public static final PluginConfigSpec<String> PREFIX_CONFIG = PluginConfigSpec.stringSetting("prefix", "");
 
@@ -28,11 +28,11 @@ public class JavaOutputExample implements Output {
 
 	// all plugins must provide a constructor that accepts id, Configuration, and
 	// Context
-	public JavaOutputExample(final String id, final Configuration configuration, final Context context) {
+	public ElasticApmServer(final String id, final Configuration configuration, final Context context) {
 		this(id, configuration, context, System.out);
 	}
 
-	JavaOutputExample(final String id, final Configuration config, final Context context, OutputStream targetStream) {
+	ElasticApmServer(final String id, final Configuration config, final Context context, OutputStream targetStream) {
 		// constructors should validate configuration options
 		this.id = id;
 		prefix = config.get(PREFIX_CONFIG);

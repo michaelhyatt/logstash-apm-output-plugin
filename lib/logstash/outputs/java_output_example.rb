@@ -2,11 +2,11 @@
 # encoding: utf-8
 require "logstash/outputs/base"
 require "logstash/namespace"
-require "logstash-output-java_output_example_jars"
+require "logstash-output-elastic_apm_server_jars"
 require "java"
 
 class LogStash::Outputs::JavaOutputExample < LogStash::Outputs::Base
-  config_name "java_output_example"
+  config_name "elastic_apm_server"
 
-  def self.javaClass() org.logstash.javaapi.JavaOutputExample.java_class; end
+  def self.javaClass() org.logstash.javaapi.ElasticApmServer.java_class; end
 end

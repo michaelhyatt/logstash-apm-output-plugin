@@ -1,14 +1,14 @@
 PLUGIN_VERSION = File.read(File.expand_path(File.join(File.dirname(__FILE__), "VERSION"))).strip unless defined?(PLUGIN_VERSION)
 
 Gem::Specification.new do |s|
-  s.name            = 'logstash-output-java_output_example'
+  s.name            = 'logstash-output-elastic_apm_server'
   s.version         = PLUGIN_VERSION
   s.licenses        = ['Apache-2.0']
-  s.summary         = "Example output using Java plugin API"
+  s.summary         = "Elastic APM Server output"
   s.description     = ""
-  s.authors         = ['Elasticsearch']
-  s.email           = 'info@elastic.co'
-  s.homepage        = "http://www.elastic.co/guide/en/logstash/current/index.html"
+  s.authors         = ['Michael Hyatt']
+  s.email           = 'mhyatt8080@gmail.com'
+  s.homepage        = "http://www.github.com/michaelhyatt/logstash-output-apm"
   s.require_paths = ['lib', 'vendor/jar-dependencies']
 
   # Files
