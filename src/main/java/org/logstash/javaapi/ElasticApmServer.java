@@ -35,7 +35,12 @@ public class ElasticApmServer implements Output {
 		configMap.put("server_urls", configuration.get(SERVER_URLS));
 		configMap.put("service_name", configuration.get(SERVICE_NAME));
 		configMap.put("log_level", configuration.get(LOG_LEVEL));
-
+		
+		// Some defaults
+		configMap.put("instrument", "false");
+		configMap.put("span_frames_min_duration", "0s");
+		configMap.put("metrics_interval", "0s");
+		
 		ElasticApmAttacher.attach(configMap);
 		
 		this.id = id;
@@ -43,7 +48,7 @@ public class ElasticApmServer implements Output {
 
 	@Override
 	public void output(final Collection<Event> events) {
-
+		events.stream().forEachOrdered(EventsProcessor::process);
 	}
 
 	@Override
@@ -62,7 +67,8 @@ public class ElasticApmServer implements Output {
 		// should return a list of all configuration options for this plugin
 		Collections.addAll(list, 
 				SERVER_URLS, 
-				SERVICE_NAME
+				SERVICE_NAME,
+				LOG_LEVEL
 				);
 		return list;
 	}
