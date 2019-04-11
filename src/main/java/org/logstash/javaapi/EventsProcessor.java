@@ -1,5 +1,6 @@
 package org.logstash.javaapi;
 
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.logging.log4j.LogManager;
@@ -29,18 +30,25 @@ public class EventsProcessor {
 		if ("TRANSACTION_START".equals(eventType)) {
 			Transaction transaction = ElasticApm.startTransaction();
 			transaction.setName(name);
-			transaction.addLabel("apm_id", id);
-//			transaction.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
+			createSpanTags(transaction, event);
+			transaction.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
 			txStore.push(transaction);
 		} else if ("SPAN_START".equals(eventType)) {
 			Span span = txStore.peek().startSpan();
 			span.setName(name);
-			span.addLabel("apm_id", id);
-//			span.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
+			createSpanTags(span, event);
+			span.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
 			txStore.push(span);
 		} else if ("TRANSACTION_END".equals(eventType) || "SPAN_END".equals(eventType)) {
-//			txStore.pop().end(timestamp.toEpochMilli() * 1_000);
-			txStore.pop().end();
+			txStore.pop().end(timestamp.toEpochMilli() * 1_000);
 		} 
+	}
+
+	private static void createSpanTags(Span span, Event event) {
+		Map<String, Object> data = event.getData();
+		data.keySet().forEach(key -> {
+			Object value = data.get(key);
+			span.addLabel(key, value.toString());
+		});
 	}
 }
