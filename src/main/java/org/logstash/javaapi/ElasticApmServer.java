@@ -1,18 +1,16 @@
 package org.logstash.javaapi;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.concurrent.CountDownLatch;
+
+import co.elastic.apm.attach.ElasticApmAttacher;
 import co.elastic.logstash.api.Configuration;
 import co.elastic.logstash.api.Context;
 import co.elastic.logstash.api.Event;
 import co.elastic.logstash.api.LogstashPlugin;
 import co.elastic.logstash.api.Output;
 import co.elastic.logstash.api.PluginConfigSpec;
-
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.concurrent.CountDownLatch;
 
 // class name must match plugin name
 @LogstashPlugin(name = "elastic_apm_server")
@@ -21,36 +19,25 @@ public class ElasticApmServer implements Output {
 	public static final PluginConfigSpec<String> PREFIX_CONFIG = PluginConfigSpec.stringSetting("prefix", "");
 
 	private final String id;
-	private String prefix;
-	private PrintStream printer;
+
 	private final CountDownLatch done = new CountDownLatch(1);
-	private volatile boolean stopped = false;
 
 	// all plugins must provide a constructor that accepts id, Configuration, and
 	// Context
 	public ElasticApmServer(final String id, final Configuration configuration, final Context context) {
-		this(id, configuration, context, System.out);
-	}
+		
+		ElasticApmAttacher.attach();
 
-	ElasticApmServer(final String id, final Configuration config, final Context context, OutputStream targetStream) {
-		// constructors should validate configuration options
 		this.id = id;
-		prefix = config.get(PREFIX_CONFIG);
-		printer = new PrintStream(targetStream);
 	}
 
 	@Override
 	public void output(final Collection<Event> events) {
-		Iterator<Event> z = events.iterator();
-		while (z.hasNext() && !stopped) {
-			String s = prefix + z.next();
-			printer.println(s);
-		}
+
 	}
 
 	@Override
 	public void stop() {
-		stopped = true;
 		done.countDown();
 	}
 
