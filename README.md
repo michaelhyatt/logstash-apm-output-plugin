@@ -4,7 +4,7 @@ Java output plugin for Logstash to communicate to Elastic APM server.
 ## Prerequisites
 You will need JDK and I won't go into how to install it here.
 
-Install Logstash, I tested it with version 6.7.1
+Install Logstash, I tested it with version 6.7.2
 https://www.elastic.co/downloads/past-releases/logstash-oss-6-7-2
 
 More info on how to install Logstash:
