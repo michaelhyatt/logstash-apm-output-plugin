@@ -10,10 +10,11 @@ https://www.elastic.co/downloads/past-releases/logstash-oss-6-7-2
 More info on how to install Logstash:
 https://www.elastic.co/guide/en/logstash/6.7/installing-logstash.html
 
-You will need ruby gem utility as well, install it with the rest of ruby, by something like `yum install ruby`, or whatever the command is on Windows.
+You will need ruby gem utility as well, if you are planning to build the code. Install it with the rest of ruby, by something like `yum install ruby`, or whatever the command is on Windows.
 
 ## Commands to run it
 ### Build gem
+If you don't feel like installing Ruby and doing the build, you can download the latest `.gem` file from the [Releases](https://github.com/michaelhyatt/logstash-apm-output-plugin/releases) section.
 ```
 /usr/bin/gem build logstash-output-elastic_apm_server.gemspec
 ```
