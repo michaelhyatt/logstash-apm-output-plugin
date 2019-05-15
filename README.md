@@ -4,6 +4,9 @@ Java output plugin for Logstash to communicate to Elastic APM server.
 ## Prerequisites
 You will need JDK and I won't go into how to install it here.
 
+ELK stack version 6.7.2 with [installed and configured APM server](https://www.elastic.co/guide/en/apm/server/6.7/installing.html). [Elastic Cloud trial](https://www.elastic.co/cloud/elasticsearch-service/signup) can be a good option. Installation instructions:
+https://www.elastic.co/guide/en/elasticsearch/reference/6.7/getting-started-install.html
+
 Install Logstash, I tested it with version 6.7.2
 https://www.elastic.co/downloads/past-releases/logstash-oss-6-7-2
 
@@ -28,6 +31,21 @@ If you don't feel like installing Ruby and doing the build, you can download the
 ```
 ./bin/logstash --java-execution -f ../logstash-output-apm/simple_test.conf -w 1 -b 1
 ```
+
+### Sample flow
+Check out simple_test.conf for an example of how the output plugin operates.
+
+### Plugin functionality overview
+Plugin relies on special fields being populated to create transactions and spans:
+* apm_command: can be one of
+  * TRANSACTION_START - required for the top level transaction. Should correspond to the start of overall transaction.
+  * SPAN_START - start of individual task
+  * SPAN_END - end of individual task
+  * TRANSACTION_END - end of overall transaction
+  * EXCEPTION - log the message as exception on current transaction
+* apm_name - transaction or span name.
+* apm_timestamp is when Transaction/Span start/end occurred.
+* All the other fields in the logstash event will be translated into Transaction or Span tags, so make sure to filter out things that shouldn't be logged.
 
 ## Limitations
 * It doesn't handle multithreading yet, use it with `-w 1 and -b 1` command line options to ensure there is only one thread processing the messages. I promise to make it work with parallel threads soon...
