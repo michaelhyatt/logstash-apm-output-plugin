@@ -47,5 +47,23 @@ Plugin relies on special fields being populated to create transactions and spans
 * apm_timestamp is when Transaction/Span start/end occurred.
 * All the other fields in the logstash event will be translated into Transaction or Span tags, so make sure to filter out things that shouldn't be logged.
 
+### To restore the sample data into Elasticsearch
+`sample_data` directory contains a sample snapshot that can be restored into Elasticsearch to work together with the sample flow.
+```
+POST _snapshot/backup1/snapshot1/_restore
+{
+  "indices": "anz-2019.03"
+}
+
+POST _snapshot/backup1
+{
+  "type": "fs",
+  "settings": {
+    "compress": true,
+    "location": "/<path_to_snapshots>/elasticbackup"
+  }
+}
+```
+
 ## Limitations
 * It doesn't handle multithreading yet, use it with `-w 1 and -b 1` command line options to ensure there is only one thread processing the messages. I promise to make it work with parallel threads soon...
