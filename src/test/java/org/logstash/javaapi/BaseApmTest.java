@@ -24,7 +24,7 @@ import co.elastic.apm.attach.bytebuddy.agent.ByteBuddyAgent;
 public abstract class BaseApmTest {
 
 	protected List<Span> spans;
-	protected List<Transaction> tx;
+	protected List<Transaction> transactions;
 	protected List<ErrorCapture> errors;
 
 	@Mock
@@ -37,8 +37,7 @@ public abstract class BaseApmTest {
 	@Before
 	public void setup() {
 
-		tx = new ArrayList<Transaction>();
-		;
+		transactions = new ArrayList<Transaction>();
 		spans = new ArrayList<Span>();
 		errors = new ArrayList<ErrorCapture>();
 
@@ -53,7 +52,7 @@ public abstract class BaseApmTest {
 		Mockito.doAnswer(new Answer<Transaction>() {
 			@Override
 			public Transaction answer(InvocationOnMock invocation) throws Throwable {
-				tx.add(invocation.getArgumentAt(0, Transaction.class));
+				transactions.add(invocation.getArgumentAt(0, Transaction.class));
 				return null;
 			}
 		}).when(reporter).report(Mockito.any(Transaction.class));
