@@ -24,7 +24,7 @@ If you don't feel like installing Ruby and doing the build, you can download the
 
 ### Install plugin
 ```
-./bin/logstash-plugin install --no-verify --local ../logstash-output-apm/logstash-output-elastic_apm_server-0.0.1.gem
+./bin/logstash-plugin install --no-verify --local ../logstash-output-apm/logstash-output-elastic_apm_server-0.0.2.gem
 ```
 
 ### Run simple_test.conf
