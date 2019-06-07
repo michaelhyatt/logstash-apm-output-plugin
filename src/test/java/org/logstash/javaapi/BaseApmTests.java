@@ -21,7 +21,7 @@ import co.elastic.apm.agent.report.Reporter;
 import co.elastic.apm.attach.bytebuddy.agent.ByteBuddyAgent;
 
 @RunWith(MockitoJUnitRunner.class)
-public abstract class BaseApmTest {
+public abstract class BaseApmTests {
 
 	protected List<Span> spans;
 	protected List<Transaction> transactions;
@@ -30,7 +30,7 @@ public abstract class BaseApmTest {
 	@Mock
 	protected Reporter reporter;
 
-	public BaseApmTest() {
+	public BaseApmTests() {
 		super();
 	}
 

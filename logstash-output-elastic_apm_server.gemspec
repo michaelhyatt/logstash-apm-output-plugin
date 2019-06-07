@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.summary         = "Elastic APM Server output"
   s.description     = ""
   s.authors         = ['Michael Hyatt']
-  s.email           = 'mhyatt8080@gmail.com'
+  s.email           = 'mhyatt8080 A T gmail D O T com'
   s.homepage        = "http://www.github.com/michaelhyatt/logstash-output-apm"
   s.require_paths = ['lib', 'vendor/jar-dependencies']
 
