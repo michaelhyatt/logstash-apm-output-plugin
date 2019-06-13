@@ -34,15 +34,15 @@ public class EventsProcessor {
 		if (TRANSACTION_START.equals(eventType)) {
 			Transaction transaction = ElasticApm.startTransaction();
 			transaction.setName(name);
-			createSpanTags(transaction, event);
 			transaction.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
+			createSpanTags(transaction, event);
 			txStore.pushTransaction(id, transaction);
 		} else if (SPAN_START.equals(eventType)) {
 
 			Span span = txStore.peek(id).startSpan();
 			span.setName(name);
-			createSpanTags(span, event);
 			span.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
+			createSpanTags(span, event);
 			txStore.pushSpan(id, span);
 		} else if (EXCEPTION.equals(eventType)) {
 
@@ -63,9 +63,17 @@ public class EventsProcessor {
 			}
 
 		} else if (SPAN_END.equals(eventType)) {
-			txStore.pop(id).end(timestamp.toEpochMilli() * 1_000);
+
+			Span span = txStore.pop(id);
+			
+			createSpanTags(span, event);
+
+			span.end(timestamp.toEpochMilli() * 1_000);
 
 		} else if (TRANSACTION_END.equals(eventType)) {
+
+			createSpanTags(txStore.peek(id), event);
+
 			int size = txStore.size(id);
 			for (int i = 0; i < size; i++) {
 				txStore.pop(id).end(timestamp.toEpochMilli() * 1_000 + i * 1_000 + 1_000);
