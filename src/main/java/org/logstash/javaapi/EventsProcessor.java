@@ -27,6 +27,9 @@ public class EventsProcessor {
 		Object apm_result = event.getField(APM_RESULT);
 		String result = apm_result == null ? "" : apm_result.toString();
 
+		Object apm_user_id = event.getField(APM_USER_ID);
+		String user_id = apm_user_id == null ? "" : apm_user_id.toString();
+		
 		logger.debug("Received eventType=" + eventType + ", id=" + id + ", name=" + name + ", timestamp="
 				+ timestamp.toEpochMilli());
 
@@ -38,6 +41,7 @@ public class EventsProcessor {
 			Transaction transaction = ElasticApm.startTransaction();
 			transaction.setName(name);
 			transaction.setStartTimestamp(timestamp.toEpochMilli() * 1_000);
+			transaction.setUser(user_id, "", user_id);
 			createSpanTags(transaction, event);
 			txStore.pushTransaction(id, transaction);
 		} else if (SPAN_START.equals(eventType)) {
@@ -108,6 +112,8 @@ public class EventsProcessor {
 	protected static final String SPAN_START = "SPAN_START";
 
 	protected static final String APM_RESULT = "apm_result";
+
+	protected static final String APM_USER_ID = "apm_user_id";
 
 	protected static final String TRANSACTION_START = "TRANSACTION_START";
 }
