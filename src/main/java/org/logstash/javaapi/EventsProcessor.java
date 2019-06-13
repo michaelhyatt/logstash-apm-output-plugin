@@ -64,15 +64,19 @@ public class EventsProcessor {
 
 		} else if (TRANSACTION_END.equals(eventType)) {
 
-			Transaction transaction = (Transaction) txStore.peek(id);
-			createSpanTags(transaction, event);
-
-			if (apm_result != null)
-				transaction.setResult(result);
-
 			int size = txStore.size(id);
 			for (int i = 0; i < size; i++) {
-				txStore.pop(id).end(timestamp.toEpochMilli() * 1_000 + i * 1_000 + 1_000);
+				Span span = txStore.pop(id);
+
+				if (span instanceof Transaction) {
+
+					createSpanTags(span, event);
+
+					if (apm_result != null)
+						((Transaction) span).setResult(result);
+				}
+
+				span.end(timestamp.toEpochMilli() * 1_000 + i * 1_000 + 1_000);
 			}
 		}
 	}
