@@ -15,7 +15,6 @@ out/
 *.gem
 Gemfile.lock
 settings.gradle
-gradle.properties
 /.classpath
 /.project
 /.settings/
