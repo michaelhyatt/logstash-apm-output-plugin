@@ -24,6 +24,9 @@ public class EventsProcessor {
 		String id = event.getField(APM_ID).toString();
 		Timestamp timestamp = (Timestamp) event.getField(APM_TIMESTAMP);
 
+		Object apm_result = event.getField(APM_RESULT);
+		String result = apm_result == null ? "" : apm_result.toString();
+
 		logger.debug("Received eventType=" + eventType + ", id=" + id + ", name=" + name + ", timestamp="
 				+ timestamp.toEpochMilli());
 
@@ -54,14 +57,18 @@ public class EventsProcessor {
 		} else if (SPAN_END.equals(eventType)) {
 
 			Span span = txStore.pop(id);
-			
+
 			createSpanTags(span, event);
 
 			span.end(timestamp.toEpochMilli() * 1_000);
 
 		} else if (TRANSACTION_END.equals(eventType)) {
 
-			createSpanTags(txStore.peek(id), event);
+			Transaction transaction = (Transaction) txStore.peek(id);
+			createSpanTags(transaction, event);
+
+			if (apm_result != null)
+				transaction.setResult(result);
 
 			int size = txStore.size(id);
 			for (int i = 0; i < size; i++) {
@@ -95,6 +102,8 @@ public class EventsProcessor {
 	protected static final String EXCEPTION = "EXCEPTION";
 
 	protected static final String SPAN_START = "SPAN_START";
+
+	protected static final String APM_RESULT = "apm_result";
 
 	protected static final String TRANSACTION_START = "TRANSACTION_START";
 }
