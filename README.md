@@ -29,7 +29,7 @@ If you don't feel like installing Ruby and doing the build, you can download the
 
 ### Run simple_test.conf
 ```
-./bin/logstash --java-execution -f ../logstash-output-apm/simple_test.conf -w 1 -b 1
+./bin/logstash --java-execution -f ../logstash-output-apm/example_logstash_configs/uipath_simple_test.conf -w 1 -b 1
 ```
 
 ### Sample flow
