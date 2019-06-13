@@ -105,8 +105,6 @@ public class EventsProcessor {
 
 	protected static final String SPAN_END = "SPAN_END";
 
-	protected static final String FLUSH = "FLUSH";
-
 	protected static final String EXCEPTION = "EXCEPTION";
 
 	protected static final String SPAN_START = "SPAN_START";
