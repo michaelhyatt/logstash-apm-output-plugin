@@ -1,0 +1,33 @@
+GET _snapshot/backup1/_status
+
+DELETE _snapshot/backup1
+
+POST _snapshot/backup1/snapshot1/_restore
+{
+  "indices": "anz-2019.03"
+}
+
+POST _snapshot/backup1
+{
+  "type": "fs",
+  "settings": {
+    "compress": true,
+    "location": "/snapshots/elasticbackup"
+  }
+}
+
+GET anz-*/_search
+{
+  "query": {
+    "match": {
+      "jobId": "5c2b73df-3338-44bd-a96c-fad2a1b00495"
+    }
+  },
+  "sort": [
+    {
+      "@timestamp": {
+        "order": "asc"
+      }
+    }
+  ]
+}
