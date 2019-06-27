@@ -59,15 +59,15 @@ services:
 #    image: docker.elastic.co/logstash/logstash:${TAG}
     build:
       context: ..
-      dockerfile: jenkins-docker/Dockerfile
+      dockerfile: docker/Dockerfile
       args:
         - tag=${TAG}
     container_name: logstash
     ports: ['3131:3131']
     networks: ['stack']
     volumes:
-      - ../example_logstash_configs/jenkins/config:/usr/share/logstash/config:ro
-      - ../example_logstash_configs/jenkins/pipeline:/usr/share/logstash/pipeline:ro
+      - ../config:/usr/share/logstash/config:ro
+      - ../pipeline:/usr/share/logstash/pipeline:ro
     command: -f /usr/share/logstash/pipeline/logstash.conf -r -w 1
 
 networks: {stack: {}}
