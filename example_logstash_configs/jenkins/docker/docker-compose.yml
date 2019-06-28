@@ -28,6 +28,7 @@ services:
       # - path.repo=/snapshots
       - node.name=elastic-node-1
       - cluster.initial_master_nodes=elastic-node-1
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
   kibana:
     image: docker.elastic.co/kibana/kibana:${TAG}
@@ -55,7 +56,7 @@ services:
     volumes:
       - /var/jenkins_home
 
-  logstash:
+  logstash-apm:
 #    image: docker.elastic.co/logstash/logstash:${TAG}
     build:
       context: ..
@@ -69,6 +70,25 @@ services:
       - ../config:/usr/share/logstash/config:ro
       - ../pipeline:/usr/share/logstash/pipeline:ro
     command: -f /usr/share/logstash/pipeline/logstash.conf -r -w 1
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
+
+  logstash-logs:
+#    image: docker.elastic.co/logstash/logstash:${TAG}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+      args:
+        - tag=${TAG}
+    container_name: logstash-logs
+    ports: ['5045:5045']
+    networks: ['stack']
+    volumes:
+      - ../config:/usr/share/logstash/config:ro
+      - ../pipeline:/usr/share/logstash/pipeline:ro
+    command: -f /usr/share/logstash/pipeline/logstash_logs.conf
+    environment:
+      - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
 
 networks: {stack: {}}
 # use docker volume to persist ES data outside of a container.
